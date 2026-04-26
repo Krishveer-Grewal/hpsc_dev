@@ -1,4 +1,4 @@
-"""Launch sub_state_node alongside the ROS-TCP endpoint that Unity connects to."""
+"""Launch sub_state_node and the ROS-TCP endpoint for Unity simulation."""
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
@@ -11,13 +11,15 @@ def generate_launch_description():
             executable='sub_state_node',
             name='sub_state_node',
         ),
-        # Bridges ROS2 DDS traffic to a plain TCP socket that Unity can reach.
-        # ROS_IP must match the machine Unity will connect to (127.0.0.1 for
-        # local simulation; set to the host's LAN IP for a networked setup).
+        # 0.0.0.0 binds to every network interface on this machine, so Unity
+        # on Windows can reach the endpoint through the WSL2 virtual adapter
+        # without needing to know its ever-changing IP address.
+
+        #!NEEDTO clean up port bindings later on
         Node(
             package='ros_tcp_endpoint',
             executable='default_server_endpoint',
             name='ros_tcp_endpoint',
-            parameters=[{'ROS_IP': '127.0.0.1', 'ROS_TCP_PORT': 10000}],
+            parameters=[{'ROS_IP': '0.0.0.0', 'ROS_TCP_PORT': 10000}],
         ),
     ])

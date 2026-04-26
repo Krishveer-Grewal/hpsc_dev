@@ -46,7 +46,7 @@ public:
 private:
   void timer_callback()
   {
-    // simulate();
+    simulate();
     publish_all();
   }
 
