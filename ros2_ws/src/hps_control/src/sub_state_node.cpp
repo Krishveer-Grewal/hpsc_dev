@@ -37,7 +37,7 @@ public:
     // Comms.
     pub_comms_status_ = create_publisher<std_msgs::msg::String>("state/comms_status", 10);
 
-    // One timer drives all publishers so every topic shares the same 20 Hz heartbeat.
+    // One timer drives all publishers so every topic shares the same heartbeat (hz).
     timer_ = create_wall_timer(
       50ms,
       std::bind(&SubStateNode::timer_callback, this));
@@ -46,7 +46,7 @@ public:
 private:
   void timer_callback()
   {
-    simulate();
+    // simulate();
     publish_all();
   }
 
